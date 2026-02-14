@@ -55,7 +55,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ==================== Contact Form Handling ====================
 // Web3Forms - Free, encrypted, no backend needed
 // Get your access key at https://web3forms.com
-const WEB3FORMS_ACCESS_KEY = 'WEB3FORMS_ACCESS_KEY';
+const WEB3FORMS_ACCESS_KEY = 'a87988e4-7306-46d2-b389-0278ec3f8680';
 
 const contactForm = document.getElementById('contactForm');
 
