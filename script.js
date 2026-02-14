@@ -53,10 +53,14 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ==================== Contact Form Handling ====================
+// Web3Forms - Free, encrypted, no backend needed
+// Get your access key at https://web3forms.com
+const WEB3FORMS_ACCESS_KEY = 'WEB3FORMS_ACCESS_KEY';
+
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
+    contactForm.addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const name = document.getElementById('name').value.trim();
@@ -74,19 +78,44 @@ if (contactForm) {
             return;
         }
 
-        // Simulate form submission
+        // Send form submission to Web3Forms
         const submitBtn = contactForm.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = 'Sending...';
         submitBtn.disabled = true;
 
-        // Simulate API call
-        setTimeout(() => {
-            showNotification('Message sent successfully! I will get back to you soon.', 'success');
-            contactForm.reset();
+        try {
+            const response = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    access_key: WEB3FORMS_ACCESS_KEY,
+                    name: name,
+                    email: email,
+                    message: message,
+                    subject: `Portfolio Contact from ${name}`,
+                    from_name: 'Portfolio Website'
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                showNotification('Message sent successfully! I will get back to you soon.', 'success');
+                contactForm.reset();
+            } else {
+                throw new Error('Form submission failed');
+            }
+        } catch (error) {
+            showNotification('Failed to send message. Please try again.', 'error');
+            console.error('Web3Forms error:', error);
+        } finally {
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
-        }, 1500);
+        }
     });
 }
 
